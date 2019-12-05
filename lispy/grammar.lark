@@ -1,0 +1,43 @@
+?start : value+
+
+?value  : number
+        | quote
+        | symbol
+        | name
+        | boolean
+        | lists
+        | operators
+        | let
+        | if_func
+
+number  : INT
+        | FLOAT
+
+name    : STRING
+
+boolean    : BOOL
+
+lists   : "(" value* ")"
+        | "(" lists ")"
+
+quote   : "'" value
+
+operators : "[" value  symbol value "]"
+
+symbol: SYMBOL
+
+let : ":" "let" "{" (symbol "=" value)* "}" "in" lists
+
+if_func  : ":" "if" value "then" ":" value (":" "elif" value "then" ":" value)+ (":" "else" ":" value)?
+    | ":" "if" value "then" ":" value (":" "else" ":" value)?
+
+
+// Terminais
+SYMBOL.0  : /[-!+\/*@$%^&~<>?|\\\w=]+/
+STRING    : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
+INT.1     : /-?\d+/
+FLOAT.2   : /-?\d+\.\d+/
+BOOL.3    : /(#f|#t)/
+
+%ignore /\s+/
+%ignore /;[^\n]*/
