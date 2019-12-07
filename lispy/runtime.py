@@ -32,7 +32,7 @@ def eval(x, env=None):
 
     # Comando (define <symbol> <expression>)
     # Ex: (define x (+ 40 2))
-    elif head == Symbol.DEFINE:
+    elif head == 'É IGUAL A':
         x, y = args
         env[x] = eval(y, env)
 
@@ -71,13 +71,21 @@ def eval(x, env=None):
 
         return proc
 
-    elif head == Symbol.ADD:
+    elif head == 'MAIS':
         x, y = args
         return eval(x, env) + eval(y, env)
 
-    elif head == Symbol.MUL:
+    elif head == 'MENOS':
+        x, y = args
+        return eval(x, env) - eval(y, env)
+
+    elif head == 'MULTIPLICADO POR':
         x, y = args
         return eval(x, env) * eval(y, env)
+
+    elif head == 'DIVIDIDO POR':
+        x, y = args
+        return eval(x, env) / eval(y, env)
 
     elif head == Symbol.EVEN:
         x = args
@@ -91,9 +99,10 @@ def eval(x, env=None):
     # (sqrt 4)
 
     else:
-        proc = eval(head, env)
-        args = [eval(arg, env) for arg in x[1:]]
-        return proc(*args)
+        print('x')
+        # proc = eval(head, env)
+        # args = [eval(arg, env) for arg in x[1:]]
+        # return proc(*args)
 
 
 #
