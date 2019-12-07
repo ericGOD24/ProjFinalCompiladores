@@ -1,43 +1,41 @@
 ?start : value+
 
 ?value  : number
-        | quote
-        | symbol
         | name
         | boolean
         | lists
         | operators
-        | let
+        | object
         | if_func
+        | symbol
 
 number  : INT
         | FLOAT
 
 name    : STRING
 
-boolean    : BOOL
+boolean : BOOL
 
-lists   : "(" value* ")"
-        | "(" lists ")"
+lists   : "[" value ("," value)*  "]"
+        | "[" "]"
 
-quote   : "'" value
+operators : value symbol value
 
-operators : "[" value  symbol value "]"
+object : "{""}"
+        | "{" name ":" value ("," name ":" value)* "}"
 
 symbol: SYMBOL
 
-let : ":" "let" "{" (symbol "=" value)* "}" "in" lists
-
-if_func  : ":" "if" value "then" ":" value (":" "elif" value "then" ":" value)+ (":" "else" ":" value)?
-    | ":" "if" value "then" ":" value (":" "else" ":" value)?
+if_func  : "SE" value "ENTÃO" value ("SENÃO SE" value "ENTÃO" value)+ ("SENÃO" value)?
+    | "SE" value "ENTÃO" value ("SENÃO" value)?
 
 
 // Terminais
-SYMBOL.0  : /[-!+\/*@$%^&~<>?|\\\w=]+/
 STRING    : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
 INT.1     : /-?\d+/
 FLOAT.2   : /-?\d+\.\d+/
-BOOL.3    : /(#f|#t)/
+BOOL.3    : /(VERDADE|FALSIDADE)/
+SYMBOL.0  : /(MAIS|MENOS|MULTIPLICADO POR|DIVIDIDO POR|É IGUAL A)/
 
 %ignore /\s+/
 %ignore /;[^\n]*/

@@ -5,7 +5,7 @@ class Symbol:
     Diferentemente de strings, símbolos com o mesmo valor possuem a mesma identidade.
     """
 
-    data : str
+    data: str
     CACHE = {}
 
     def __new__(cls, data):
@@ -36,19 +36,20 @@ class Symbol:
 # Formas especiais
 Symbol.QUOTE = Symbol('quote')
 Symbol.LET = Symbol('let')
-Symbol.IF = Symbol('if')
+Symbol.IF = Symbol('SE')
 Symbol.LAMBDA = Symbol('lambda')
 Symbol.DEFINE = Symbol('define')
 Symbol.BEGIN = Symbol('begin')
 
 # Funções úteis
 Symbol.LIST = Symbol('list')
-Symbol.ADD = Symbol('+')
-Symbol.SUB = Symbol('-')
-Symbol.MUL = Symbol('*')
-Symbol.DIV = Symbol('/')
+Symbol.ADD = Symbol('MAIS')
+Symbol.SUB = Symbol('MENOS')
+Symbol.MUL = Symbol('MULTIPLICADO POR')
+Symbol.DIV = Symbol('DIVIDIDO POR')
 Symbol.EVEN = Symbol('even?')
 Symbol.ODD = Symbol('odd?')
+
 
 class _Var:
     def __getattr__(self, attr):
@@ -56,5 +57,6 @@ class _Var:
 
     def __repr__(self):
         return 'var'
+
 
 var = _Var()

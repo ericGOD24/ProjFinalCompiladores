@@ -21,35 +21,19 @@ class LispTransformer(InlineTransformer):
     def lists(self, *args):
         return list(args)
 
-    def quote(self, *args):
-        x, *y = args
-        return [Symbol.QUOTE, args[0]]
-
     def boolean(self, *args):
-        return str(args[0]) == "#t"
+        return str(args[0]) == "VERDADE"
 
     def symbol(self, *args):
-        return Symbol(args[0])
+        return str(args[0])
 
     def operators(self, *args):
         op = [args[1], args[0], args[2]]
         return (op)
 
-    def let(self, *args):
-        *x, y = args
-        dic = []
-
-        mylist = dic
-        for i in range(0, len(x), 2):
-            mylist.append([x[i], x[i+1]])
-
-        return [Symbol.LET, dic, y]
-
-#     def if_func(self, *args):
-#         x = args
-#         dic = []
-#         get_if_list(dic, args)
-#         return dic
+    def if_func(self, *args):
+        print(args)
+        return list(args)
 
 
 # def get_if_list(list, args):
