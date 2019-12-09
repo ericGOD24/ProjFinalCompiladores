@@ -29,23 +29,29 @@ def eval(x, env=0):
 
     elif head == 'retira da conta':  # subtrair
         arg = y[1]
+        new_env = env
         if env - arg < 0:
-            return 'quer pagar pra estar aqui é?'
-        new_env = env - arg
+            print('quer pagar pra estar aqui é? não da pra retirar da conta não')
+        else:
+            new_env = env - arg
         return eval(x, new_env)
 
     elif head == 'desejo um bacalhau de':  # multiplicação
         arg = y[1]
-        new_env = env * arg
+        new_env = env
+        if env - arg <= 0:
+            print('impossivel um bacalhau assim')
+        else:
+            new_env = env * arg
         return eval(x, new_env)
 
     elif head == 'parcela ai em':  # divisão
         arg = y[1]
-        if arg == 0 or (arg is not int and arg is not float):
-            return 'nao dá mano, so sorry'
-        if arg < 0:
-            return 'ai tu quer né'
-        new_env = env / arg
+        new_env = env
+        if arg <= 0:
+            print('nao dá parcelar isso mano, so sorry')
+        else:
+            new_env = env / arg
         return eval(x, new_env)
 
     elif head == 'desejo uma tilapia':  # exponencial
