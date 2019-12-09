@@ -11,47 +11,60 @@ def eval(x, env=0):
     Avalia expressão no ambiente de execução dado.
     """
 
-    # Avalia tipos atômicos
-    # if isinstance(x, Symbol):
-    #     return env[x]
-    # elif isinstance(x, (int, float, bool, str)):
-    #     return x
+    if len(x) == 0:
+        return env
 
-    # Avalia formas especiais e listas
-    head, *args = x
-    return x
+    y = x.pop(0)
+
+    # Avalia tipos atômicos
+    if y == Symbol.BEGIN:
+        return eval(x, env)
+
+    head = y[0]
+
     if head == 'adiciona ao pedido':  # somar
-        env = env + arg
-        return eval()
+        arg = y[1]
+        new_env = env + arg
+        return eval(x, new_env)
 
     elif head == 'retira da conta':  # subtrair
+        arg = y[1]
         if env - arg < 0:
-            return('quer pagar pra estar aqui é? sua conta vai dar %f', env - arg)
-        env = env - arg
+            return 'quer pagar pra estar aqui é?'
+        new_env = env - arg
+        return eval(x, new_env)
 
     elif head == 'desejo um bacalhau de':  # multiplicação
-        env = env * arg
+        arg = y[1]
+        new_env = env * arg
+        return eval(x, new_env)
 
     elif head == 'parcela ai em':  # divisão
+        arg = y[1]
         if arg == 0 or (arg is not int and arg is not float):
             return 'nao dá mano, so sorry'
         if arg < 0:
             return 'ai tu quer né'
-        env = env / arg
+        new_env = env / arg
+        return eval(x, new_env)
 
     elif head == 'desejo uma tilapia':  # exponencial
-        env = math.exp(env)
+        new_env = math.exp(env)
+        return eval(x, new_env)
 
     elif head == 'desejo uma batata frita':  # raiz quadrada
-        env = math.sqrt(env)
+        new_env = math.sqrt(env)
+        return eval(x, new_env)
 
     elif head == 'campeão, da um desconto ai de':  # porcentagem
-        env = env * arg / 100
+        new_env = env * arg / 100
+        return eval(x, new_env)
     elif head == 'desce a conta chefia':  # valor do env
-        return env
+        print(env)
+        return eval(x, env)
     else:
-        printf(x[0])
-        return
+        print(head)
+        return eval(x, env)
 #
 # Cria ambiente de execução.
 #
