@@ -1,6 +1,9 @@
 from lispy import var, env, Symbol, parse, eval
 
-run = lambda src, env=None: eval(parse(src), env)
+
+def run(src, env=0): return eval(parse(src), env)
+
+
 x, y, a, b, c, f, g, h, op = map(Symbol, 'x y a b c f g h op'.split())
 
 
@@ -11,13 +14,14 @@ class TestGrammar:
         assert parse("'x") == [Symbol.QUOTE, x]
         assert parse("'(1 2 3)") == [Symbol.QUOTE, [1, 2, 3]]
         assert parse("'(+ 40 2)") == [Symbol.QUOTE, [Symbol.ADD, 40, 2]]
-    
+
 
 class TestRuntime:
     def test_eval_quote(self):
         assert run("'\"string\"") == "string"
         assert run("'x") == run('(quote x)') == x
-        assert run("'(if #t 42 0)") == run("(quote (if #t 42 0))") == [Symbol.IF, True, 42, 0]
+        assert run("'(if #t 42 0)") == run(
+            "(quote (if #t 42 0))") == [Symbol.IF, True, 42, 0]
         assert run('(quote (+ 1 2))') == [Symbol.ADD, 1, 2]
         assert run('(quote "string")') == "string"
         assert run("'(+ 1 2)") == [Symbol.ADD, 1, 2]
@@ -68,4 +72,4 @@ class TestRuntime:
         assert callable(fn)
         assert fn(1, 2) == 3
         assert fn(40, 2) == 42
-        assert e[x] == 10 
+        assert e[x] == 10

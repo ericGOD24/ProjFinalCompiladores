@@ -18,21 +18,22 @@ def eval(x, env=0):
     #     return x
 
     # Avalia formas especiais e listas
-    head, arg = x
-
-    elif head == 'adiciona ao pedido':  # somar
+    head, *args = x
+    return x
+    if head == 'adiciona ao pedido':  # somar
         env = env + arg
+        return eval()
 
     elif head == 'retira da conta':  # subtrair
         if env - arg < 0:
-            return('quer pagar pra estar aqui é?')
+            return('quer pagar pra estar aqui é? sua conta vai dar %f', env - arg)
         env = env - arg
 
     elif head == 'desejo um bacalhau de':  # multiplicação
         env = env * arg
 
     elif head == 'parcela ai em':  # divisão
-        if arg = 0 or (arg is not int and arg is not float):
+        if arg == 0 or (arg is not int and arg is not float):
             return 'nao dá mano, so sorry'
         if arg < 0:
             return 'ai tu quer né'
@@ -41,7 +42,7 @@ def eval(x, env=0):
     elif head == 'desejo uma tilapia':  # exponencial
         env = math.exp(env)
 
-    elif head == 'desejo uma batata frita':  # exponencial
+    elif head == 'desejo uma batata frita':  # raiz quadrada
         env = math.sqrt(env)
 
     elif head == 'campeão, da um desconto ai de':  # porcentagem
@@ -49,7 +50,8 @@ def eval(x, env=0):
     elif head == 'desce a conta chefia':  # valor do env
         return env
     else:
-        return x
+        printf(x[0])
+        return
 #
 # Cria ambiente de execução.
 #

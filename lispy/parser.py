@@ -10,16 +10,19 @@ class LispTransformer(InlineTransformer):
     def start(self, *args):
         return [Symbol.BEGIN, *args]
 
-    def name(self, *args):
+    def speak(self, *args):
         string = str(args[0])
         string = string[1:len(args[0]) - 1]
         string = string.replace(r'\n', "\n")
         string = string.replace(r'\t', "\t")
         string = string.replace("\\", "")
-        return string
+        return [string]
 
-    def lists(self, *args):
-        return list(args)
+    def parameter_operator(self, *args):
+        return [str(args[0]), float(args[1])]
+
+    def single_operator(self, *args):
+        return [str(args[0])]
 
     def boolean(self, *args):
         return str(args[0]) == "VERDADE"

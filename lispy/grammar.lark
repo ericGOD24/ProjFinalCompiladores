@@ -1,41 +1,25 @@
 ?start : value+
 
-?value  : number
-        | name
-        | boolean
-        | lists
-        | operators
-        | object
-        | if_func
-        | symbol
+?value  : parameter_operator
+        | single_operator
+        | speak
 
 number  : INT
         | FLOAT
 
-name    : STRING
+speak   : STRING
 
-boolean : BOOL
+parameter_operator : OPERATORS number
 
-lists   : "[" value ("," value)*  "]"
-        | "[" "]"
-
-operators : value symbol value
-
-object : "{""}"
-        | "{" name ":" value ("," name ":" value)* "}"
-
-symbol: SYMBOL
-
-if_func  : "SE" value "ENTÃO" value ("SENÃO SE" value "ENTÃO" value)+ ("SENÃO" value)?
-    | "SE" value "ENTÃO" value ("SENÃO" value)?
-
+single_operator : SIGLE_OPERATORS
 
 // Terminais
 STRING    : /"[^"\\]*(\\[^\n\t\r\f][^"\\]*)*"/
 INT.1     : /-?\d+/
 FLOAT.2   : /-?\d+\.\d+/
 BOOL.3    : /(VERDADE|FALSIDADE)/
-SYMBOL.0  : /(MAIS|MENOS|MULTIPLICADO POR|DIVIDIDO POR|É IGUAL A)/
+OPERATORS  : /(adiciona ao pedido|retira da conta|desejo um bacalhau de|parcela ai em|campeão, da um desconto ai de)/
+SIGLE_OPERATORS :  /(desce a conta chefia|desejo uma tilapia|desejo uma batata frita)/
 
 %ignore /\s+/
 %ignore /;[^\n]*/
