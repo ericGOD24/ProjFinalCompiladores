@@ -39,7 +39,7 @@ def eval(x, env=0):
     elif head == 'desejo um bacalhau de':  # multiplicação
         arg = y[1]
         new_env = env
-        if env - arg <= 0:
+        if arg <= 0:
             print('impossivel um bacalhau assim')
         else:
             new_env = env * arg
