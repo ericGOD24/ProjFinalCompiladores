@@ -71,21 +71,25 @@ def eval(x, env=None):
 
         return proc
 
-    elif head == 'MAIS':
+    elif head == 'adicionar ao pedido':
         x, y = args
         return eval(x, env) + eval(y, env)
 
-    elif head == 'MENOS':
+    elif head == 'retirar da conta':
         x, y = args
         return eval(x, env) - eval(y, env)
 
-    elif head == 'MULTIPLICADO POR':
+    elif head == 'quero varios':
         x, y = args
         return eval(x, env) * eval(y, env)
 
-    elif head == 'DIVIDIDO POR':
+    elif head == 'parcelar em':
         x, y = args
         return eval(x, env) / eval(y, env)
+
+    elif head == 'quantas exponecialmente mais':
+        x, y = args
+        return eval(x, env) ** eval(y, env)
 
     elif head == Symbol.EVEN:
         x = args
