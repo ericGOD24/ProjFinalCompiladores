@@ -24,7 +24,11 @@ def eval(x, env=0):
 
     if head == 'adiciona ao pedido':  # somar
         arg = y[1]
-        new_env = env + arg
+        new_env = env
+        if arg < 0:
+            print('se tu não sabe, isso subtrai')
+        else:
+            new_env = env + arg
         return eval(x, new_env)
 
     elif head == 'retira da conta':  # subtrair
@@ -63,7 +67,8 @@ def eval(x, env=0):
         return eval(x, new_env)
 
     elif head == 'campeão, da um desconto ai de':  # porcentagem
-        new_env = env * arg / 100
+        arg = y[1]
+        new_env = env - (env * arg / 100)
         return eval(x, new_env)
     elif head == 'desce a conta chefia':  # valor do env
         print(env)
