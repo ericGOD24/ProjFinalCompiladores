@@ -16,24 +16,6 @@ class TestLispGrammar:
         assert parse('x') == x
         assert parse('+') == Symbol('+')
 
-    def test_strings(self):
-        assert parse('"foobar"') == "foobar"
-        assert parse('"foo bar"') == "foo bar"
-        assert parse(r'"foo\nbar"') == "foo\nbar"
-        assert parse(r'"foo\tbar"') == "foo\tbar"
-        assert parse(r'"foo\tbar"') == "foo\tbar"
-        assert parse(r'"foo\"bar\""') == "foo\"bar\""
-
-    def test_list(self):
-        assert parse('(+ 1 2)') == [Symbol.ADD, 1, 2]
-        assert parse('(1 2 3 4)') == [1, 2, 3, 4]
-        assert parse('(func)') == [Symbol('func'),]
-        assert parse('()') == []
-
-    def test_nested_list(self):
-        assert parse('(1 (2 (3 4)))') == [1, [2, [3, 4]]]
-        assert parse('((1 2 3))') == [[1, 2, 3]]
-
 
 class TestEnvCreation:
     def test_env_creation(self):
@@ -45,30 +27,23 @@ class TestEnvCreation:
 
 class TestRuntime:
     def test_eval_simple(self):
-        assert run('42') == 42
+        assert run('adiciona ao pedido 10 desce a conta chefia') == 10
+        assert run('desejo um bacalhau de 5 desce a conta chefia') == 0
+        assert run('desejo uma tilapia -2 desce a conta chefia') == 0.13533528
+        assert run('adiciona ao pedido 4 desejo uma batata frita desce a conta chefia') == 2
+        assert run('adiciona ao pedido 10 campeão, da um desconto ai de 10 desce a conta chefia') == 1
 
     def test_eval_if_simple(self):
-        assert run('(if #t 42 0)') == 42
-        assert run('(if #f 42 0)') == 0
+        assert run('parcela ai em 0') == 'nao dá mano, so sorry'
+        assert run('parcela ai em -13') == 'ai tu quer né'
 
     def test_eval_if_nested(self):
-        assert run('(if (odd? 1) (+ 40 2) (+ 1 1))') == 42
-        assert run('(if (even? 1) (+ 40 2) (+ 1 1))') == 2
+        assert run('retira da conta -1') == 'quer pagar pra estar aqui é?'
+  
+    # def test_call_environment_functions(self):
+    #     assert run('(even? 42)') is True
+    #     assert run('(odd? 42)') is False
 
-    def test_eval_define_simple(self):
-        e = env()
-        assert run("(define x 42)", e) is None
-        assert e[Symbol('x')] == 42
-
-    def test_eval_define_nested(self):
-        e = env()
-        assert run("(define x (+ 40 2))", e) is None
-        assert e[Symbol('x')] == 42
-    
-    def test_call_environment_functions(self):
-        assert run('(even? 42)') is True
-        assert run('(odd? 42)') is False
-
-    def test_call_function_with_nested_arguments(self):
-        assert run('(even? (+ 1 1))') is True
-        assert run('(+ (* 2 3) 4)') == 10
+    # def test_call_function_with_nested_arguments(self):
+    #     assert run('(even? (+ 1 1))') is True
+    #     assert run('(+ (* 2 3) 4)') == 10
