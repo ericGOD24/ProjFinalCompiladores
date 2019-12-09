@@ -6,112 +6,55 @@ from types import MappingProxyType
 from .symbol import Symbol
 
 
-def eval(x, env=None):
+def eval(x, env=0):
     """
     Avalia expressão no ambiente de execução dado.
     """
 
-    # Cria ambiente padrão, caso o usuário não passe o argumento opcional "env"
-    if env is None:
-        env = ChainMap({}, global_env)
-
     # Avalia tipos atômicos
-    if isinstance(x, Symbol):
-        return env[x]
-    elif isinstance(x, (int, float, bool, str)):
-        return x
+    # if isinstance(x, Symbol):
+    #     return env[x]
+    # elif isinstance(x, (int, float, bool, str)):
+    #     return x
 
     # Avalia formas especiais e listas
-    head, *args = x
+    head, arg = x
 
-    # Comando (if <test> <then> <other>)
-    # Ex: (if (even? x) (quotient x 2) x)
-    if head == Symbol.IF:
-        boolean, x, y = args
-        return eval(x, env) if eval(boolean, env) else eval(y, env)
+    elif head == 'adiciona ao pedido':  # somar
+        env = env + arg
 
-    # Comando (define <symbol> <expression>)
-    # Ex: (define x (+ 40 2))
-    elif head == 'É IGUAL A':
-        x, y = args
-        env[x] = eval(y, env)
+    elif head == 'retira da conta':  # subtrair
+        if env - arg < 0:
+            return('quer pagar pra estar aqui é?')
+        env = env - arg
 
-    # Comando (quote <expression>)
-    # (quote (1 2 3))
-    elif head == Symbol.QUOTE:
-        return args[0]
+    elif head == 'desejo um bacalhau de':  # multiplicação
+        env = env * arg
 
-    # Comando (let <expression> <expression>)
-    # (let ((x 1) (y 2)) (+ x y))
-    elif head == Symbol.LET:
-        x, y = args
-        local_dict = {}
-        for item in x:
-            local_dict[item[0]] = eval(item[1], env)
+    elif head == 'parcela ai em':  # divisão
+        if arg = 0 or (arg is not int and arg is not float):
+            return 'nao dá mano, so sorry'
+        if arg < 0:
+            return 'ai tu quer né'
+        env = env / arg
 
-        return eval(y, ChainMap(local_dict, global_env))
-        # return y
-        return local_dict
+    elif head == 'desejo uma tilapia':  # exponencial
+        env = math.exp(env)
 
-    # Comando (lambda <vars> <body>)
-    # (lambda (x) (+ x 1))
-    elif head == Symbol.LAMBDA:
-        (_, names, body) = x
+    elif head == 'desejo uma batata frita':  # exponencial
+        env = math.sqrt(env)
 
-        for name in names:
-            if isinstance(name, Symbol):
-                pass
-            else:
-                raise TypeError('Argumentos de um lambda deve ser uma lista de símbolos. Lambdas inválidos\n'
-                                'devem levantar uma exceção de TypeError, SyntaxError ou ValueError.')
-
-        def proc(*args):
-            local = dict(zip(names, args))
-            return eval(body, ChainMap(local, env))
-
-        return proc
-
-    elif head == 'adicionar ao pedido':
-        x, y = args
-        return eval(x, env) + eval(y, env)
-
-    elif head == 'retirar da conta':
-        x, y = args
-        return eval(x, env) - eval(y, env)
-
-    elif head == 'quero varios':
-        x, y = args
-        return eval(x, env) * eval(y, env)
-
-    elif head == 'parcelar em':
-        x, y = args
-        return eval(x, env) / eval(y, env)
-
-    elif head == 'quantas exponecialmente mais':
-        x, y = args
-        return eval(x, env) ** eval(y, env)
-
-    elif head == Symbol.EVEN:
-        x = args
-        return eval(x[0], env) % 2 == 0
-
-    elif head == Symbol.ODD:
-        x = args
-        return eval(x[0], env) % 2 != 0
-
-    # Lista/chamada de funções
-    # (sqrt 4)
-
+    elif head == 'campeão, da um desconto ai de':  # porcentagem
+        env = env * arg / 100
+    elif head == 'desce a conta chefia':  # valor do env
+        return env
     else:
-        print('x')
-        # proc = eval(head, env)
-        # args = [eval(arg, env) for arg in x[1:]]
-        # return proc(*args)
-
-
+        return x
 #
 # Cria ambiente de execução.
 #
+
+
 def env(*args, **kwargs):
     """
     Retorna um ambiente de execução que pode ser aproveitado pela função
