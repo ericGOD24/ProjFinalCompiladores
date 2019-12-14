@@ -46,7 +46,7 @@ A Linguagem se baseia num valor base e você irá modificando ele conforme o usu
 
   ou
   
-  `eu quero uma "cerveja"``
+  `eu quero uma "cerveja"`
 
   ou
 
