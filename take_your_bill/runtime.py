@@ -6,79 +6,118 @@ from types import MappingProxyType
 from .symbol import Symbol
 
 
-def eval(x, env=0):
+def eval(x, bill=0, env=None):
     """
     Avalia expressão no ambiente de execução dado.
     """
 
     if len(x) == 0:
-        return env
+        return bill
 
     y = x.pop(0)
 
     # Avalia tipos atômicos
     if y == Symbol.BEGIN:
-        return eval(x, env)
+        return eval(x, bill, env)
+
+    if env == None:
+        env = standard_env
+
 
     head = y[0]
 
-    if head == 'adiciona ao pedido':  # somar
+    if head == 'adiciona':  # somar
         arg = y[1]
-        new_env = env
+        new_bill = bill
         if arg < 0:
             print('se tu não sabe, isso subtrai')
         else:
-            new_env = env + arg
-        return eval(x, new_env)
-
-    elif head == 'retira da conta':  # subtrair
+            new_bill = bill + arg
+        return eval(x, new_bill, env)
+    
+    elif head == 'eu':  # somar
         arg = y[1]
-        new_env = env
-        if env - arg < 0:
+        arg = arg.strip('"')
+        new_bill = bill
+        if arg in env:
+            new_bill = bill + env[arg]
+        else:
+            print('não temos isso no cardápio );')
+        return eval(x, new_bill, env)
+
+    elif head == 'retira':  # subtrair
+        arg = y[1]
+        new_bill = bill
+        if bill - arg < 0:
             print('quer pagar pra estar aqui é? não da pra retirar da conta não')
         else:
-            new_env = env - arg
-        return eval(x, new_env)
+            new_bill = bill - arg
+        return eval(x, new_bill, env)
 
-    elif head == 'desejo um bacalhau de':  # multiplicação
+    elif head == 'desejo':  # multiplicação
         arg = y[1]
-        new_env = env
+        new_bill = bill
         if arg <= 0:
             print('impossivel um bacalhau assim')
         else:
-            new_env = env * arg
-        return eval(x, new_env)
+            new_bill = bill * arg
+        return eval(x, new_bill, env)
 
-    elif head == 'parcela ai em':  # divisão
+    elif head == 'parcela':  # divisão
         arg = y[1]
-        new_env = env
+        new_bill = bill
         if arg <= 0:
             print('nao dá parcelar isso mano, so sorry')
         else:
-            new_env = env / arg
-        return eval(x, new_env)
+            new_bill = bill / arg
+        return eval(x, new_bill, env)
 
-    elif head == 'desejo uma tilapia':  # exponencial
-        new_env = math.exp(env)
-        return eval(x, new_env)
-
-    elif head == 'desejo uma batata frita':  # raiz quadrada
-        new_env = math.sqrt(env)
-        return eval(x, new_env)
-
-    elif head == 'campeão, da um desconto ai de':  # porcentagem
+    elif head == 'da':  # porcentagem
         arg = y[1]
-        new_env = env - (env * arg / 100)
-        return eval(x, new_env)
-    elif head == 'desce a conta chefia':  # valor do env
-        print(env)
-        return eval(x, env)
+        new_bill = bill - (bill * arg / 100)
+        return eval(x, new_bill, env)
+    elif head == 'desce':  # valor do bill
+        print(bill)
+        return eval(x, bill, env)
+    elif head == 'manda':  # cardapio completo
+        for key,val in env.items():
+            print (key, " => ", val, " reais")
+        return eval(x, bill, env)
+
+    elif head == 'add cardapio':  # adicionar ao cardapio
+        name = y[1]
+        name = name.strip('"')
+        value = y[2]
+        env[name] = value
+        print(name, "adicionado ao cardápio, senhor")
+        return eval(x, bill, env)
+
+    elif head == 'add qtd':  # adiciona à conta algo do cardapio com quantidade definida
+        value = y[1]
+        name = y[2]
+        name = name.strip('"')
+        new_bill = bill
+        if name in env:
+            new_bill = bill + (value * env[name])
+        else:
+            print("não temos isso no cardápio );")
+        return eval(x, new_bill, env)
     else:
         print(head)
-        return eval(x, env)
+        return eval(x, bill, env)
 #
 # Cria ambiente de execução.
 #
+
+standard_env = {
+    'parmegiana' : 30,
+    'fritas' : 10,
+    'camarão' : 20,
+    'cerveja' : 7,
+    'pinga' : 20,
+    'hamburger' : 20,
+    'picanha' : 15
+}
 
 
 def env(*args, **kwargs):

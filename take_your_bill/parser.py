@@ -1,6 +1,7 @@
 from lark import Lark, InlineTransformer
 from pathlib import Path
 
+from re import split
 from .runtime import Symbol
 
 
@@ -18,33 +19,24 @@ class LispTransformer(InlineTransformer):
         string = string.replace("\\", "")
         return [string]
 
-    def parameter_operator(self, *args):
-        return [str(args[0]), float(args[1])]
+    def operators(self, *args):
+        head = args[0]
+        if head.type == 'INITIAL_PARAMETER':
+            head = split(r'\s+', str(head))
+            if head[0] == 'adiciona':
+                return ['add cardapio' ,str(args[1]), float(args[2])]
+            return ['add qtd' , int(args[1]), str(args[2])]
+        if head.type == 'SIGLE_OPERATOR':
+            head = split(r'\s+', str(head))
+            return [head[0]]
+        if head.type == 'OPERATORS':
+            head = split(r'\s+', str(head))
+            return [head[0], args[1]]
+            
+        return head.type
 
     def single_operator(self, *args):
         return [str(args[0])]
-
-    def boolean(self, *args):
-        return str(args[0]) == "VERDADE"
-
-    def symbol(self, *args):
-        return str(args[0])
-
-    def operators(self, *args):
-        op = [args[1], args[0], args[2]]
-        return (op)
-
-    def if_func(self, *args):
-        print(args)
-        return list(args)
-
-
-# def get_if_list(list, args):
-#     x = args
-#     list.append([Symbol.IF, x[0], x[1]])
-#     if len(x) > 2:
-#         get_if_list(list[0], x[2:])
-
 
 def parse(src: str):
     """

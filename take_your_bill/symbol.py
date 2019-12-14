@@ -40,6 +40,7 @@ Symbol.IF = Symbol('SE')
 Symbol.LAMBDA = Symbol('lambda')
 Symbol.DEFINE = Symbol('define')
 Symbol.BEGIN = Symbol('begin')
+Symbol.OPERATORS = Symbol('operators')
 
 # Funções úteis
 Symbol.LIST = Symbol('list')
